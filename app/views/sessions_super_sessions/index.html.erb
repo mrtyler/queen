@@ -1,0 +1,18 @@
+<h1>Listing sessions_super_sessions</h1>
+
+<table>
+  <tr>
+  </tr>
+
+<% for sessions_super_session in @sessions_super_sessions %>
+  <tr>
+    <td><%= link_to 'Show', sessions_super_session %></td>
+    <td><%= link_to 'Edit', edit_sessions_super_session_path(sessions_super_session) %></td>
+    <td><%= link_to 'Destroy', sessions_super_session, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New sessions_super_session', new_sessions_super_session_path %>

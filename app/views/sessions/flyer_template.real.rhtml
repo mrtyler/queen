@@ -1,0 +1,354 @@
+<!-- vim:ts=2:et:tw=0
+-->
+
+<HTML>
+
+<HEAD>
+</HEAD>
+
+<BODY>
+<CENTER>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=700>
+  <TR>
+    <TD WIDTH=260 VALIGN=TOP>
+      <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=260>
+        <TR>
+          <TD COLSPAN=3 WIDTH=260 ALIGN=CENTER>
+            <IMG SRC="http://www.academicchess.com/lv/images/academic_chess_logo.jpg" WIDTH=200>
+            <!--<IMG SRC="/images/academic_chess_logo.jpg" WIDTH=200>-->
+          </TD>
+        </TR>
+        <TR HEIGHT=5>
+          <TD COLSPAN=3></TD>
+        </TR>
+        <TR HEIGHT=5>
+          <TD COLSPAN=3 BGCOLOR="#000000"></TD>
+        </TR>
+        <TR>
+          <TD WIDTH=5 BGCOLOR="#000000"></TD>
+          <TD WIDTH=250>
+            <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=250>
+              <TR HEIGHT=5>
+                <TD></TD>
+              </TR>
+              <TR>
+                <TD ALIGN=CENTER>
+                  <FONT SIZE=5><B><U>SIGN UP TODAY!</U></B></FONT>
+                </TD>
+              </TR>
+              <TR HEIGHT=12>
+                <TD></TD>
+              </TR>
+              <TR>
+                <TD ALIGN=CENTER>
+                  <B>The fee of $<%= sprintf("%0.2f", @session.cost) %> for After-School chess instruction includes:</B>
+                </TD>
+              </TR>
+              <TR HEIGHT=10>
+                <TD></TD>
+              </TR>
+              <TR>
+                <TD ALIGN=LEFT>
+                  <TABLE BORDER=0 CELLPADDING=5 CELLSPACING=0>
+                    <TR>
+                      <TD>
+                        <LIST>
+                          <LI><B><%= @session.number_of_weeks_derived %> weeks of chess instruction</B></LI>
+                          <LI><B>Extensive chess lessons and guided playing</B></LI>
+                          <LI><B>Exclusive Academic Chess booklets</B></LI>
+                        </LIST>
+                      </TD>
+                    </TR>
+                  </TABLE>
+                </TD>
+              </TR>
+              <TR HEIGHT=12>
+                <TD></TD>
+              </TR>
+              <TR>
+                <TD ALIGN=CENTER>
+                  <B><U>To sign up:</U> Please make check payable to 'Academic Chess' and deliver to the school office before the first day of class.</B>
+                </TD>
+              </TR>
+              <TR HEIGHT=10>
+                <TD></TD>
+              </TR>
+            </TABLE>
+          </TD>
+          <TD WIDTH=5 BGCOLOR="#000000"></TD>
+        </TR>
+        <TR HEIGHT=5>
+          <TD COLSPAN=3 BGCOLOR="#000000"></TD>
+        </TR>
+      </TABLE>
+      <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=260>
+        <TR HEIGHT=5>
+          <TD COLSPAN=3></TD>
+        </TR>
+        <TR HEIGHT=5>
+          <TD COLSPAN=3 BGCOLOR="#000000"></TD>
+        </TR>
+        <TR>
+          <TD WIDTH=5 BGCOLOR="#000000"></TD>
+          <TD WIDTH=250>
+            <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=250>
+              <TR HEIGHT=3>
+                <TD></TD>
+              </TR>
+              <TR>
+                <TD ALIGN=CENTER>
+                  <FONT SIZE=5><B><U>Free Online Chess</U></B></FONT>
+                </TD>
+              </TR>
+              <TR>
+                <TD ALIGN=LEFT>
+                  <TABLE align="center" BORDER=0 CELLPADDING=1 CELLSPACING=0>
+                    <TR>
+                      <TD align="center">
+                        <LIST>
+                          <B>Visit our free site at www.chess.ac</B>
+                        </LIST>
+                      </TD>
+                    </TR>
+                  </TABLE>
+                </TD>
+              </TR>
+            </TABLE>
+          </TD>
+          <TD WIDTH=5 BGCOLOR="#000000"></TD>
+        </TR>
+        <TR HEIGHT=3>
+          <TD COLSPAN=3 BGCOLOR="#000000"></TD>
+        </TR>
+      </TABLE>
+    </TD>
+    <TD WIDTH=20></TD>
+    <TD WIDTH=420 VALIGN=TOP>
+      <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=420>
+        <TR HEIGHT=30>
+          <TD></TD>
+        </TR>
+        <TR>
+          <TD ALIGN=CENTER>
+            <FONT SIZE=7><B>Academic Chess at<BR><%= School.find(@session.school_id).name %> Elementary</B></FONT>
+          </TD>
+        </TR>
+        <!--
+        <% if ! @session.who.nil? && ! @session.who.empty? %>
+          <TR HEIGHT=20>
+            <TD></TD>
+          </TR>
+          <TR>
+            <TD ALIGN=LEFT>
+              <FONT SIZE=5>Who:&nbsp;<%= @session.who %></FONT>
+            </TD>
+          </TR>
+        <% end %>
+        -->
+        <TR HEIGHT=20>
+          <TD></TD>
+        </TR>
+        <TR>
+          <TD ALIGN=LEFT>
+            <FONT SIZE=5>When:&nbsp;<%= @session.day_of_week %></FONT>
+          </TD>
+        </TR>
+        <TR HEIGHT=15>
+          <TD>&nbsp;</TD>
+        </TR>
+        <TR>
+          <TD ALIGN=LEFT>
+            <FONT SIZE=5>Time:&nbsp;<%= @session.start_time %> to <%= @session.end_time %></FONT>
+          </TD>
+        </TR>
+        <TR HEIGHT=15>
+          <TD></TD>
+        </TR>
+        <% if @session.has_tracks %>
+          <TR>
+            <td>
+              <!-- mini-calendar for tracks -->
+              <table border="1" cellpadding="2" cellspacing="0">
+                <tr>
+                  <th></th>
+                  <% for date in @session.get_all_dates_mm_dd %>
+                    <%= "<th>#{date}</th>" %>
+                  <% end %>
+                </tr>
+              
+                <% for track in (1..5) %>
+                  <% # light gray background for even-numbered rows %>
+                  <tr <%= "bgcolor=\"#eeeeee\"" if 0 == (track % 2) %> >
+                    <td align="left">
+                      <b>Track&nbsp;<%= track %></b>
+                    </td>
+                    <% event_count = 0 %>
+                    <% for date in @session.get_all_dates %> 
+                      <td align="center">
+                        <% # look for a Blackoutdate belonging to this track (or track 0, which represents holidays). if this date is blacked out for this track, put an empty cell. otherwise, put an x. %>
+                        <b>
+                          <% if Blackoutdate.find(:all, :conditions => ["date = ? and (track = ? or track = 0)", date, track]).empty? && event_count < @session.number_of_weeks_derived %>
+                            <%= "x" %>
+                            <% event_count = event_count.succ %>
+                          <% else %>
+                            <%= "&nbsp;" %>
+                          <% end %>
+                        </b>
+                      </td>
+                    <% end %>
+                  </tr>
+                <% end %>
+              
+              </table>
+              <!-- end mini-calendar for tracks -->
+            </td>
+          </tr>
+        <% else %>
+          <TR>
+            <TD ALIGN=LEFT>
+              <table border="0">
+                <tr>
+                  <td valign="top">
+                    <FONT size=5>Dates:</FONT>
+                  </td>
+                  <% if ! @session.who.nil? && ! @session.who.empty? %>
+                    </tr>
+                    <tr>
+                      <td>
+                        <font size=5>
+                          &nbsp;<%= @session.who %>: <%= @session.get_all_dates_mm_dd.join(', ') %>
+                        </font>
+                      </td>
+                  <% else %>
+                    <td>
+                      <FONT SIZE=5>
+                      <%= @session.get_all_dates_mm_dd.join(', ') %>
+                      </FONT>
+                    </td>
+                  <% end %>
+                </tr>
+              </table>
+            </td>
+          </TR>
+        <% end %>
+        <TR HEIGHT=20>
+          <TD></TD>
+        </TR>
+        <TR>
+          <TD ALIGN=LEFT>
+            <FONT SIZE=5>Meeting Place:&nbsp;<%= @session.meeting_place %></FONT>
+          </TD>
+        </TR>
+         <TR HEIGHT=15>
+            <TD>&nbsp;</TD>
+          </TR>
+          <TD ALIGN=LEFT>
+            <FONT SIZE=5><i>New and continuing students welcome</i></FONT>
+          </TD>
+        </TR>
+        <TR HEIGHT=15>
+          <TD></TD>
+        </TR>
+      </TABLE>
+    </TD>
+  </TR>
+</TABLE>
+</CENTER>
+
+<CENTER>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=700>
+  <TR HEIGHT=10>
+    <TD></TR>
+  <TR>
+    <TD><HR></TD>
+  </TR>
+  <TR HEIGHT=10>
+    <TD></TD>
+  </TR>
+  <TR>
+    <TD ALIGN=CENTER>
+      <FONT SIZE=5><B>Chess increases IQ and teaches children to:</B></FONT>
+    </TD>
+  </TR>
+  <TR HEIGHT=15>
+    <TD></TD>
+  </TR>
+  <TR>
+    <TD ALIGN=CENTER>
+      <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTh=590>
+        <TR>
+          <TD WIDTH=210 VALIGN=TOP>
+            <LIST>
+              <LI><FONT SIZE=5><B>Think Deeply</B></FONT></LI>
+              <LI><FONT SIZE=5><B>Gain Confidence</B></FONT></LI>
+              <LI><FONT SIZE=5><B>Solve Problems</B></FONT></LI>
+              <LI><FONT SIZE=5><B>Develop Patience</B></FONT></LI>
+            </LIST>
+          </TD>
+          <TD WIDTH=140></TD>
+          <TD WIDTH=240 VALIGN=TOP>
+            <LIST>
+              <LI><FONT SIZE=5><B>Evaluate Positions</B></FONT></LI>
+              <LI><FONT SIZE=5><B>Compete Well</B></FONT></LI>
+              <LI><FONT SIZE=5><B>Visualize Results</B></FONT></LI>
+              <LI><FONT SIZE=5><B>Strategize and Plan</B></FONT></LI>
+            </LIST>
+          </TD>
+        </TR>
+      </TABLE>
+    </TD>
+  </TR>
+</TABLE>
+</CENTER>
+
+<CENTER>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=700>
+  <TR HEIGHT=25>
+    <TD></TD>
+  </TR>
+  <TR>
+    <TD ALIGN=CENTER>
+      <FONT SIZE=4><B>For more information call: <u>456-7445</u> or email: <u>tyler@academicchess.com</u><BR>or visit our website at: <U>www.academicchess.com</U></B></FONT>
+    </TD>
+  </TR>
+  <TR HEIGHT=10>
+    <TD></TD>
+  </TR>
+  <TR>
+    <TD><HR></TD>
+  </TR>
+  <TR HEIGHT=10>
+    <TD></TD>
+  </TR>
+</TABLE>
+</CENTER>
+
+<B><I>I give permission for my child to attend after-school chess classes at <%= School.find(@session.school_id).name %> Elementary on <%= @session.day_of_week %>. I understand it is my responsibility to arrange adult supervision immediately at the end of Chess class.</I></B>
+
+<P>
+<b><I>Student Name</I> <%= (@person.fname && @person.lname) ? "<font size=+1><tt><u>#{@person.fname} #{@person.lname}</u></tt></font>" : "___________________________________________" %>
+<I>Grade</I> <%= @person.grade && ! @person.grade.to_s.empty? ? "<font size=+1><tt><u>#{@person.grade}</u></tt></font>" : "_________" %> <BR>
+<I>Teacher</I> <%= @person.teacher && ! @person.teacher.empty? ? "<font size=+1><tt><u>#{@person.teacher}</u></tt></font>" : "________________________________________________" %> </B>
+<b><i>Track</i> <%= @person.track && ! @person.track.to_s.empty? ? "<font size=+1><tt><u>#{@person.track}</u></tt></font>" : "__________" %> <BR>
+<B><I>Home Phone</I> <%= @person.phone1 && ! @person.phone1.empty? ? "<font size=+1><tt><u>#{@person.phone1}</u></tt></font>" : "______________________" %> 
+<I>Emergency Contact</I> <%= @person.phone2 && ! @person.phone2.empty? ? "<font size=+1><tt><u>#{@person.phone2}</u></tt></font>" : "____________________________________" %></B><BR>
+<B><I>Email Address</I> <%= @person.email && ! @person.email.empty? ? "<font size=+1><tt><u>#{@person.email}</u></tt></font>" : "_________________________________" %> <FONT SIZE=2><I>Used to give important tournament and class&nbsp;notifications.</I></FONT></B><BR>
+<B><I>Parent Name</I> ________________________________________ <I>Parent Signature</I> ____________________</B><BR>
+
+
+
+<P>
+<CENTER>
+<FONT SIZE=2>
+<!--
+<B><I>Pay with credit card online at&nbsp;
+<%= "<A HREF=\"http://www.academicchess.com/signup.php?id=#{@session.signup_url_numbers}\" TARGET=\"signup\">" %>
+<FONT COLOR="black"><%= "http://www.academicchess.com/signup.php?id=#{@session.signup_url_numbers}" -%></FONT>
+</A>
+</I></B></FONT>
+<BR>
+-->
+<FONT SIZE=2><%= @session.get_all_dates.first %> - <%= School.find(@session.school_id).name %> Elementary</FONT>
+</CENTER>
+</BODY>
+</HTML>

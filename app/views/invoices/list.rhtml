@@ -1,0 +1,50 @@
+<!-- vim:tw=0:et:ts=2
+-->
+
+<h1>Listing invoices</h1>
+
+<% @payment_types_ary = PaymentType.name_id_array %>
+
+<%= render :partial => 'shared/filter' %>
+
+<table>
+  <tr>
+  <th>Payer</th>
+  <th>Payee</th>
+  <th>Amount</th>
+  <th>Pay Type</th>
+  <th>Date</th>
+  <th>Session</th>
+  </tr>
+  
+<% total = 0 %>
+
+<% for invoice in @invoices %>
+  <tr>
+    <% @payer = Person.find(:first, :conditions => { :id => invoice.payer_id }) %>
+    <td><%= "#{@payer.lname}, #{@payer.fname}" if ! @payer.nil? %></td>
+    <% @payee = Person.find(:first, :conditions => { :id => invoice.payee_id }) %>
+    <td><%= "#{@payee.lname}, #{@payee.fname}" if ! @payee.nil? %></td>
+    <% total = total + invoice.amount %>
+    <td><%=h invoice.amount %></td>
+    <td><%= @payment_types_ary.rassoc(invoice.payment_type_id).first if @payment_types_ary.rassoc(invoice.payment_type_id) %></td>
+    <td><%=h Event.find(invoice.event_id).date %></td>
+    <td><%=h Session.find(Event.find(invoice.event_id).session_id).description %></td>
+    <td><%=h invoice.payment_desc %></td>
+    <td><%= link_to 'Show', :action => 'show', :id => invoice %></td>
+    <td><%= link_to 'Edit', :action => 'edit', :id => invoice %></td>
+    <td><%= link_to 'Destroy', { :action => 'destroy', :id => invoice }, :confirm => 'Are you sure?', :method => :post %></td>
+  </tr>
+<% end %>
+
+<tr>
+  <td><b>Total for displayed invoices: <%=h total %></b></td>
+</tr>
+</table>
+
+<%= link_to 'Previous page', { :page => @invoice_pages.current.previous } if @invoice_pages.current.previous %>
+<%= link_to 'Next page', { :page => @invoice_pages.current.next } if @invoice_pages.current.next %> 
+
+<br />
+
+<%= link_to 'New invoice', :action => 'new' %>

@@ -1,0 +1,8 @@
+<% for column in ResultType.content_columns %>
+<p>
+  <b><%= column.human_name %>:</b> <%=h @result_type.send(column.name) %>
+</p>
+<% end %>
+
+<%= link_to 'Edit', :action => 'edit', :id => @result_type %> |
+<%= link_to 'Back', :action => 'list' %>

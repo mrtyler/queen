@@ -1,0 +1,29 @@
+<!-- vim:ts=2:et:tw=0
+-->
+
+<!-- begin _filter -->
+<!-- builds form elements for a set of Filters defined in the controller. -->
+<h2>Filters:</h2>
+
+<% form_tag ({ :action => params[:action] }, { :method => 'get' }) do %>
+  <% @filters.each do |f| %>
+    <label for=<%= "\"#{f.label_name}\"" %>><%= f.display_name %></label>
+    <% if f.type == "select" %>
+      <select id=<%= "\"#{f.label_name}\"" %> name=<%= "\"#{f.label_name}\"" %>>
+        <%= "<option value=\"\"></option>" if f.blank_enabled %>
+        <% f.op_vals.each do |ov| %>
+          <option value= <%= "\"#{ov.last}\"" %> <%= "selected=\"selected\"" if @filter_values[f.label_name] && @filter_values[f.label_name].to_s == ov.last.to_s %>>
+            <%= ov.first %>
+          </option>
+        <% end %>
+      </select>
+    <% elsif f.type == "text" %>
+      <input type="text" size=15 name= <%= "\"#{f.label_name}\"" %> value= <%= "\"#{@filter_values[f.label_name]}\"" %> />
+    <% else %>
+      <b>Unknown type <%= f.type %> for filter: <%= f.name %></b>
+    <% end %>
+  <% end %>
+
+  <%= submit_tag "Filter" %>
+<% end %>
+<!-- end _filter -->

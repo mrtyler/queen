@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title>QUEEN > <%= h(controller.controller_name + " > " + controller.action_name) %></title>
+  <%= stylesheet_link_tag 'scaffold' %>
+</head>
+<body>
+
+<table width="100%" height=50>
+<tr>
+<td bgcolor="#000000">
+<center><font color="#ffffff">queen!</font></center>
+</td>
+<td bgcolor="#ffffff">
+<%= link_to "people", :controller => "people", :action => "list" %>
+ | 
+<%= link_to "schools", :controller => "schools", :action => "list" %>
+ | 
+<%= link_to "sessions", :controller => "sessions", :action => "list" %>
+ | 
+<%= link_to "events", :controller => "events", :action => "list" %>
+ | 
+<%= link_to "invoices", :controller => "invoices", :action => "list" %>
+ | 
+<%= link_to "games", :controller => "games", :action => "list" %>
+ | 
+<%= link_to "stats", :controller => "people", :action => "stats" %>
+</td>
+</tr>
+</table>
+<hr width="100%">
+
+
+<p style="color: green"><%= flash[:notice] %></p>
+
+<%= yield  %>
+
+</body>
+</html>

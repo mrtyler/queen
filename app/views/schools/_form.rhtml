@@ -1,0 +1,25 @@
+<!-- vim:tw=0:et:ts=2
+-->
+
+<%= error_messages_for 'school' %>
+
+<!--[form:school]-->
+<p><label for="school_name">Name</label><br/>
+<%= text_field 'school', 'name'  %></p>
+
+<p><label for="school_phone">Phone</label><br/>
+<%= text_field 'school', 'phone'  %></p>
+
+<p><label for="school_fax">Fax</label><br/>
+<%= text_field 'school', 'fax'  %></p>
+
+<p><label for="school_address">Address</label><br/>
+<%= text_field 'school', 'address'  %></p>
+
+<p><label for="school_address">Enrollment</label><br/>
+<%= text_field 'school', 'enrollment'  %></p>
+
+<p><label for="school_has_tracks">Has Tracks?</label><br/>
+<%= select 'school', 'has_tracks', { 'yes', true, 'no', false }, { :selected => true } %></p>
+<!--[eoform:school]-->
+

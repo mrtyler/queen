@@ -1,0 +1,12 @@
+<!-- vim:ts=2:et:tw=0
+-->
+<!-- begin _pages -->
+<!-- the prev page and next page links -->
+
+<% @filter_values[:page] = @person_pages.current.previous %>
+<%= link_to 'Previous page', @filter_values if @person_pages.current.previous %>
+<% @filter_values[:page] = @person_pages.current.next %>
+<%= link_to 'Next page', @filter_values if @person_pages.current.next %> 
+<% @filter_values.delete(:page) %>
+<br />
+<!-- end _pages -->

@@ -1,0 +1,10 @@
+<!-- vim:tw=0:et:ts=2
+-->
+
+<p>
+  <b>Id:</b> <%= h @achievement.id %>
+  <b>Name:</b> <%= h @achievement.name %>
+</p>
+
+<%= link_to 'Edit', edit_achievement_path(@achievement) %> |
+<%= link_to 'Back', achievements_path %>

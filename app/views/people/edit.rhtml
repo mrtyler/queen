@@ -1,0 +1,12 @@
+<h1>Editing person</h1>
+
+<% form_tag :action => 'update', :id => @person do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag 'Edit' %>
+<% end %>
+
+<%= @person.display_all_enrolled_sessions %>
+
+<%= link_to 'Show', :action => 'show', :id => @person %> |
+<%= link_to 'Sessions', :action => 'manage_sessions', :id => @person %> |
+<%= link_to 'Back', :action => 'list' %>

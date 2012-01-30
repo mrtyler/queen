@@ -1,0 +1,32 @@
+<!-- vim:tw=0:et:ts=2
+-->
+<%= error_messages_for 'session' %>
+
+<!--[form:session]-->
+<p><label for="session_cost">Cost</label><br/>
+$<%= text_field 'session', 'cost'  %></p>
+
+<p><label for="session_school_id">School</label><br/>
+<%= select 'session', 'school_id', School.find(:all).collect {|s| [s.name, s.id]}, { :include_blank => false } %></p>
+
+<p><label for="session_has_tracks">Has Tracks?</label><br/>
+<%= select 'session', 'has_tracks', { 'yes', true, 'no', false }, { :include_blank => false } %></p>
+
+<p><label for="session_start_time">Start Time</label><br/>
+<%= text_field 'session', 'start_time'  %></p>
+
+<p><label for="session_start_time">End Time</label><br/>
+<%= text_field 'session', 'end_time'  %></p>
+
+<p><label for="session_meeting_place">Meeting Place</label><br/>
+<%= text_field 'session', 'meeting_place'  %></p>
+
+<p><label for="session_number_of_weeks">Number of Weeks (only set this if counting Events doesn't work)</label><br/>
+<%= text_field 'session', 'number_of_weeks'  %></p>
+
+<p><label for="session_signup_url_numbers">Singup URL Numbers (Legacy; get from AC Matrix)</label><br/>
+<%= text_field 'session', 'signup_url_numbers'  %></p>
+
+<p><label for="session_who">Who</label><br/>
+<%= text_field 'session', 'who'  %></p>
+<!--[eoform:session]-->

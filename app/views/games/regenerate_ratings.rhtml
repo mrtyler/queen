@@ -1,0 +1,11 @@
+<!-- vim:tw=0:et:ts=2
+-->
+
+<h1>Re-generate ratings from scratch</h1>
+<h2>(be careful)</h2>
+
+<% form_tag :action => params[:action] do %>
+  <p><label for="default_rating">Default rating</label><br/>
+  <%= text_field_tag 'default_rating', @default_rating %></p>
+  <%= submit_tag 'Re-generate ratings' %>
+<% end %>

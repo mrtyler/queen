@@ -1,0 +1,11 @@
+<h1>New sessions_super_session</h1>
+
+<%= error_messages_for :sessions_super_session %>
+
+<% form_for(@sessions_super_session) do |f| %>
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', sessions_super_sessions_path %>

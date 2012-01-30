@@ -1,0 +1,60 @@
+<!-- vim:tw=0:et:ts=2
+-->
+
+<h1>Listing people</h1>
+
+<%= render :partial => 'shared/filter' %>
+
+<%= link_to 'New person', :action => 'new' %>
+
+<table>
+  <tr>
+    <th>Fname</th>
+    <th>Lname</th>
+    <th>School</th>
+    <th>Grade</th>
+    <th>Section</th>
+    <th>Instr?</th>
+    <th>Track</th>
+    <th>Phone1</th>
+    <th>Phone2</th>
+    <th>Teacher</th>
+    <th>Email</th>
+    <th>Updated</th>
+  </tr>
+  
+<% for person in @people %>
+  <tr>
+    <td><%= link_to person.fname, :action => 'edit', :id => person %></td>
+    <td><%= link_to person.lname, :action => 'edit', :id => person %></td>
+    <td><%=h School.find(person.school_id).name if person.school_id %></td>
+    <td><%=h person.grade %></td>
+    <td><%=h person.section %></td>
+    <td>
+      <% if person.instructor %>
+        <%= link_to "roll", :action => 'instr_roll', :id => person %>
+        <%= link_to "inv", :controller => 'invoices', :action => 'list', :filter_person => person.id %>
+        <%= link_to "paysheet", :action => 'paysheet', :id => person %>
+      <% end %>
+    </td>
+    <td><%=h person.track %></td>
+    <td><%=h person.phone1 %></td>
+    <td><%=h person.phone2 %></td>
+    <td><%=h person.teacher %></td>
+    <td><%=h person.email %></td>
+    <td><%=h person.last_updated %></td>
+
+    <td><%= link_to 'Flyer', :controller => 'sessions', :action => 'flyer_template', :id => @filter_values[:filter_flyer_session], :person_id => person %></td>
+    <td><%= link_to 'Addon', :action => 'addon', :id => person, :session_id => @filter_values[:filter_flyer_session] %></td>
+    <td><%= link_to 'Sessions', :action => 'manage_sessions', :id => person %></td>
+    <td><%= link_to 'Destroy', { :action => 'destroy', :id => person }, :confirm => 'Are you sure?', :method => :post %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= render :partial => 'pages' %>
+
+<%= link_to 'New person', :action => 'new' %>
+
+<h2>Emails:</h2>
+<%=h @emails.join(', ') %>

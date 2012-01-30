@@ -1,0 +1,14 @@
+<!-- vim:tw=0:et:ts=2
+-->
+
+<h1>Editing game</h1>
+
+<%= render :partial => 'shared/filter' %>
+
+<% form_tag :action => 'update', :id => @game do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag 'Edit' %>
+<% end %>
+
+<%= link_to 'Show', :action => 'show', :id => @game %> |
+<%= link_to 'Back', :action => 'list' %>

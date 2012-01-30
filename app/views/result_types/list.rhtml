@@ -1,0 +1,27 @@
+<h1>Listing result_types</h1>
+
+<table>
+  <tr>
+  <% for column in ResultType.content_columns %>
+    <th><%= column.human_name %></th>
+  <% end %>
+  </tr>
+  
+<% for result_type in @result_types %>
+  <tr>
+  <% for column in ResultType.content_columns %>
+    <td><%=h result_type.send(column.name) %></td>
+  <% end %>
+    <td><%= link_to 'Show', :action => 'show', :id => result_type %></td>
+    <td><%= link_to 'Edit', :action => 'edit', :id => result_type %></td>
+    <td><%= link_to 'Destroy', { :action => 'destroy', :id => result_type }, :confirm => 'Are you sure?', :method => :post %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= link_to 'Previous page', { :page => @result_type_pages.current.previous } if @result_type_pages.current.previous %>
+<%= link_to 'Next page', { :page => @result_type_pages.current.next } if @result_type_pages.current.next %> 
+
+<br />
+
+<%= link_to 'New result_type', :action => 'new' %>

@@ -1,0 +1,25 @@
+<!-- vim:tw=0:et:ts=2
+-->
+
+<h1>Listing achievements</h1>
+
+<table>
+  <tr>
+	<th>Id</th>
+  	<th>Name</th>
+  </tr>
+
+<% for achievement in @achievements %>
+  <tr>
+	<td><%= h achievement.id %></td>
+	<td><%= h achievement.name %></td>
+    <td><%= link_to 'Show', achievement %></td>
+    <td><%= link_to 'Edit', edit_achievement_path(achievement) %></td>
+    <td><%= link_to 'Destroy', achievement, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New achievement', new_achievement_path %>

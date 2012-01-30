@@ -1,0 +1,16 @@
+<!-- vim:tw=0:et:ts=2
+-->
+
+<h1>Editing achievement</h1>
+
+<%= error_messages_for :achievement %>
+
+<% form_for(@achievement) do |f| %>
+  <p>
+    <%= render :partial => 'form' %>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @achievement %> |
+<%= link_to 'Back', achievements_path %>

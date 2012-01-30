@@ -1,0 +1,27 @@
+<h1>Listing payment_types</h1>
+
+<table>
+  <tr>
+  <% for column in PaymentType.content_columns %>
+    <th><%= column.human_name %></th>
+  <% end %>
+  </tr>
+  
+<% for payment_type in @payment_types %>
+  <tr>
+  <% for column in PaymentType.content_columns %>
+    <td><%=h payment_type.send(column.name) %></td>
+  <% end %>
+    <td><%= link_to 'Show', :action => 'show', :id => payment_type %></td>
+    <td><%= link_to 'Edit', :action => 'edit', :id => payment_type %></td>
+    <td><%= link_to 'Destroy', { :action => 'destroy', :id => payment_type }, :confirm => 'Are you sure?', :method => :post %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= link_to 'Previous page', { :page => @payment_type_pages.current.previous } if @payment_type_pages.current.previous %>
+<%= link_to 'Next page', { :page => @payment_type_pages.current.next } if @payment_type_pages.current.next %> 
+
+<br />
+
+<%= link_to 'New payment_type', :action => 'new' %>

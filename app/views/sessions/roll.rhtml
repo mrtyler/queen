@@ -1,0 +1,73 @@
+<!-- vim:tw=0:et:ts=2
+-->
+
+<h1>Roll sheet for <%= School.find(@session.school_id).name %> session #<%= @session.id %></h1>
+
+<% @print_version = params[:print_version] %>
+
+<%= render :partial => 'actions' %>
+
+<% form_tag :action => 'roll' do %>
+  <table cellspacing="0" <%= 'border="1" cellpadding="2"' if @print_version%>>
+    <tr>
+      <th></th>
+      <th>Name</th>
+      <th>Sect</th>
+      <th>Grade</th>
+      <th>Track</th>
+      <% for @date in @session.get_all_dates_mm_dd %>
+        <th><%= @date %></th>
+      <% end %>
+    </tr>
+  
+    <% # figure out who all the people are so we can sort them meaningfully. %>
+    <% @person_session_ary = PeopleSession.find(:all, :conditions => { :session_id => @session.id }) %>
+    <% @person_ary = Array.new %>
+    <% for @p in @person_session_ary %>
+      <% @person_ary.push(Person.find(@p.person_id)) %>
+    <% end %>
+    <% @person_ary.sort! { |x,y| x.lname <=> y.lname } %>
+    <% @line_count = 1 %>
+    <% for @person in @person_ary %>
+      <tr <%= @line_count % 2 == 0 ? "bgcolor=\"#eeeeee\"" : "" %>>
+        <td><%= @line_count %></td>
+        <% if @print_version %>
+          <td><%= "#{@person.lname}, #{@person.fname}" %></td>
+        <% else %>
+          <td><%= link_to "#{@person.lname}, #{@person.fname}", :action => 'edit', :controller => 'people', :id => @person.id %></td>
+        <% end %>
+        <td><%= @person.section %></td>
+        <td><%= @person.grade %></td>
+        <td><%= @person.track %></td>
+        <% @event_count = 0 %>
+        <% for @event in @session.get_all_events %>
+          <% @done = @track_break = @attended = false %>
+          <% @bd = Blackoutdate.find(:first, :conditions => { :date => @event.date, :track => @person.track }) %>
+          <% if @event_count >= @session.number_of_weeks_derived %>
+            <% @done = true %>
+          <% elsif @session.has_tracks and ! @bd.nil? and @bd.date == @event.date %>
+            <% @track_break = true %>
+          <% else %>
+            <% @event_count = @event_count.next %>
+          <% end %>
+          <% @attended = ! EventsPerson.find(:first, :conditions => { :event_id => @event.id, :person_id => @person.id }).nil? %>
+          <td <%= "bgcolor=\"#aaaaaa\"" if (@done || @track_break)%> >
+            <%= "done" if @done %>
+            <%= "track" if @track_break %>
+            <%= @attended ? "x" : "&nbsp;" %>
+            <% if ! @print_version %>
+              <input name="checkbox[<%= @person.id %>][<%= @event.id %>]" type="checkbox" value="yes" <%= "checked=\"checked\"" if @attended %>>
+              <input name="checkbox[<%= @person.id %>][<%= @event.id %>]" type="hidden" value="no">
+            <% end %>
+          </td>
+        <% end %>
+        <% if ! @print_version %>
+          <td><%= link_to 'Flyer', :action => 'flyer_template', :id => @session.id, :person_id => @person.id %></td>
+        <% end %>
+      </tr>
+      <% @line_count = @line_count.succ %>
+    <% end %>
+  </table>
+
+  <%= submit_tag 'Submit' unless @print_version %>
+<% end %>

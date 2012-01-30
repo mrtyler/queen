@@ -1,0 +1,44 @@
+<!-- # vi:tw=0:et:ts=2
+-->
+<h1>Managing sessions for <%= @person.flname %></h1>
+
+<% form_tag :action => 'manage_sessions' do %>
+  <table>
+    <tr>
+      <th>Session</th>
+      <th>Enrolled?</th>
+      <th>Pay Type</th>
+      <th>Pay Amt</th>
+      <th>Pay Desc</th>
+      <th>Inv</th>
+    </tr>
+
+    <% for session in @sessions do %>
+      <% is_enrolled = @person.is_enrolled(session.id) %>
+      <tr>
+        <td><%= link_to (h session.description), :action => "edit", :controller => "sessions", :id => session.id %></td>
+        <td><%= @person.enrolled_checkbox(session.id) %></td>
+        <% if is_enrolled %>
+          <% # there should be an invoice. use it to populate values for user editing. 
+          %>
+          <% invoice = Invoice.find(:first, :conditions => { :payer_id => @person.id, :event_id => session.first_event_id }) %>
+          <% raise Exception.new("null invoice for person #{@person.id} with session first_event_id #{session.first_event_id}.") if invoice.nil? %>
+          <td><%= PaymentType.dropdown("payment_type_id[#{session.id}]", invoice.payment_type_id) %></td>
+          <td><input name="cost[<%= session.id %>]" type="text" value="<%= invoice.amount %>" size="8"/></td>
+          <td><input name="payment_desc[<%= session.id %>]" type="text" value="<%= invoice.payment_desc %>" size="20"/></td>
+          <td><%= link_to invoice.id, :action => "edit", :controller => "invoices", :id => invoice.id %></td>
+        <% else %>
+          <% # there is no invoice, so pick some reasonable values out of the session. 
+          %>
+          <td><%= PaymentType.dropdown("payment_type_id[#{session.id}]") %></td>
+          <td><input name="cost[<%= session.id %>]" type="text" value="<%= session.cost %>" size="8"/></td>
+          <td><input name="payment_desc[<%= session.id %>]" type="text" size="20"/></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+  <%= submit_tag 'Manage' %>
+<% end %>
+
+<%= link_to 'Edit Person', :action => 'edit', :id => @person %> |
+<%= link_to 'Back to list', :action => 'list' %>

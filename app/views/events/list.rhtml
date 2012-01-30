@@ -1,0 +1,60 @@
+<!-- vim:tw=0:et:ts=2
+-->
+
+<h2>Date filter</h2>
+<% form_tag :action => 'list' do %>
+  <label for="start_date" name="start_date">Start date</label>
+  <input name="start_date" type="text" length="10" <%= "value=\"#{@start_date}\"" %>>
+  <label for="end_date" name="end_date">End date</label>
+  <input name="end_date" type="text" length="10" <%= "value=\"#{@end_date}\"" %>>
+
+  <%= submit_tag 'Change' %>
+<% end %>
+
+<h1>Listing events</h1>
+
+<table cellspacing="0" 'border="1" cellpadding="2"'>
+  <tr>
+    <th>Sun</th>
+    <th>Mon</th>
+    <th>Tue</th>
+    <th>Wed</th>
+    <th>Thu</th>
+    <th>Fri</th>
+    <th>Sat</th>
+  </tr>
+
+  <tr>
+    <% # empty cells to pad up to the first event %>
+    <% @start_date.wday.times do |t| %>
+      <td></td>
+    <% end %>
+
+    <% cur_date = @start_date %>
+    <% while cur_date <= @end_date %>
+      <% if 0 == cur_date.wday %>
+        <tr>
+      <% end %>
+
+      <td valign="top" <%= 'bgcolor="ccffcc"' if cur_date == Date.today %>>
+        <%= '<b><font color="00ff00">' if cur_date == Date.today %>
+        <%= "#{cur_date.month}/#{cur_date.day}" %>
+        <%= '</b></font>' if cur_date == Date.today %>
+        <p>
+        <% while @events.first && @events.first.date == cur_date %>
+          <% e = @events.shift %>
+          <%= link_to "#{Session.find(e.session_id).description}", :controller => 'sessions', :action => 'edit', :id => e.session_id %>
+          <br/>
+        <% end %>
+      </td>
+      <% cur_date = cur_date.succ %>
+
+      <!-- HACK: this is broken -->
+      <% if 7 == cur_date.wday %>
+        </tr>
+      <% end %>
+    <% end %>
+
+  <% # prevent trailing /tr %>
+  <%= "</tr>" unless 7 == cur_date.wday %>
+</table>

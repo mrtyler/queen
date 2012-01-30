@@ -1,0 +1,67 @@
+<!-- vim:tw=0:et:ts=2
+-->
+
+<% trbgcolor="#6666ff" %>
+
+<table>
+  <tr>
+    <td align="left"><img src="http://www.academicchess.com/lv/images/academic_chess_logo.jpg" height=120></td>
+    <td width="20%"></td>
+    <td>
+      <table cellspacing="0" border="1" cellpadding="2">
+        <tr><td align="center"><h1>INSTRUCTOR INVOICE FORM</h1></td></tr>
+        <tr bgcolor=<%=h "#{trbgcolor}" %>><td>NAME: <%=h "#{@person.fname} #{@person.lname}"  %></td></tr>
+        <tr><td>ADDRESS: <%=h @person.address  %></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<table cellspacing="0" border="1" cellpadding="2">
+  <tr bgcolor=<%=h "#{trbgcolor}" %>>
+    <td>SOCIAL SECURITY NUMBER:</td>
+    <td>TELEPHONE NUMBER:</td>
+    <td>TODAY'S DATE:</td>
+    <td>FOR THE WEEK(S) OF:</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td><%=h @person.phone1 %></td>
+    <td><%=h Date.today %></td>
+    <td><%=h "#{@start_date}-#{@end_date}" %></td>
+  </tr>
+</table>
+
+<p>
+
+<table cellspacing="0" border="1" cellpadding="2">
+  <tr bgcolor=<%=h "#{trbgcolor}" %>>
+    <td>Day</td> 
+    <td>Date</td> 
+    <td>Start Time</td> 
+    <td>End Time</td> 
+    <td>School Name</td> 
+    <td>Type</td> 
+    <td>Instructor Level</td> 
+    <td>Class Id</td> 
+    <td>Job Rate</td> 
+    <td>Total</td> 
+  </tr>
+
+  <% for invoice in @invoices %>
+    <% event = Event.find(invoice.event_id) %>
+    <% session = Session.find(event.session_id) %>
+    <tr>
+	    <td><%=h Date::DAYNAMES[event.date.wday][0..2] %></td>
+	    <td><%=h event.date %></td>
+	    <td></td>
+	    <td></td>
+	    <td><%=h School.find(session.school_id).name %></td>
+	    <td></td>
+	    <td></td>
+	    <td></td>
+	    <td><%=h @person.rate %></td>
+	    <td><%=h invoice.amount %></td>
+    </tr>
+  <% end %>
+</table>

@@ -1,0 +1,2 @@
+module BlackoutdatesHelper
+end

@@ -1,0 +1,16 @@
+bugs:
+- some kind of transaction block so if Events don't get created, the
+  Session doesn't either.
+- on list pages, it's doing a query each time school_id shows up to get
+  the name. precache this by fetching the table once at the beginning
+  into an array, then referring to that array for the rest of the times.
+
+
+
+
+
+
+
+
+features:
+- lock tables when editing

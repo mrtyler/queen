@@ -1,0 +1,21 @@
+<%= error_messages_for 'invoice' %>
+
+<!--[form:invoice]-->
+<p><label for="invoice_payer_id">Payer</label><br/>
+<%= select 'invoice', 'payer_id', Person.name_id_array, { :include_blank => true}  %></p>
+
+<p><label for="invoice_payee_id">Payee</label><br/>
+<%= select 'invoice', 'payee_id', Person.name_id_array, { :include_blank => true}  %></p>
+
+<p><label for="invoice_payment_type_id">Payment Type</label><br/>
+<%= select 'invoice', 'payment_type_id', PaymentType.name_id_array, { :include_blank => true}  %></p>
+
+<p><label for="invoice_amount">Amount</label><br/>
+<%= text_field 'invoice', 'amount'  %></p>
+
+<p><label for="invoice_event_id">Event (takes first by date from listed Session)</label><br/>
+<%= select 'invoice', 'event_id', Event.description_id_array, { :include_blank => true } %></p>
+
+<p><label for="invoice_payment_desc">Payment Desc</label><br/>
+<%= text_field 'invoice', 'payment_desc'  %></p>
+<!--[eoform:invoice]-->

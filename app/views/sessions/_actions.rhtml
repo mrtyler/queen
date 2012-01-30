@@ -1,0 +1,14 @@
+<!-- vim:tw=0:et:ts=2
+-->
+<%= error_messages_for 'session' %>
+
+<!--[form:actions]-->
+<% unless @print_version %>
+  <%= link_to "Printer-friendly version", :action => controller.action_name, :id => @session.id, :print_version => true %>
+  <%= link_to 'Flyer', :action => 'flyer_template', :id => @session.id %></td>
+  <%= link_to 'Manage People', :action => 'manage_people', :id => @session.id %></td>
+  <%= link_to 'Roll', :action => 'roll', :id => @session.id %></td>
+  <%= link_to 'Contact', :action => 'contact', :id => @session.id %></td>
+  <p>
+<% end %>
+<!--[eoform:actions]-->

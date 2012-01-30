@@ -1,0 +1,14 @@
+<%= error_messages_for 'note' %>
+
+<!--[form:note]-->
+<p><label for="note_date">Date</label><br/>
+<%= date_select 'note', 'date'  %></p>
+
+<p><label for="note_entity_type_id">Entity Type</label><br/>
+<%= select 'note', 'entity_type_id', EntityType.find(:all).collect {|s| [s.name, s.id]}, { :include_blank => false } %></p>
+this is kind of meaningless because we're not going to try and figure out all the entities and make dropdowns. also dropdowns for things like people are going to be ridiculous. so really, we're going to create notes from the various pages, just like we create Events from Sesssions.
+
+<p><label for="note_text">Text</label><br/>
+<%= text_area 'note', 'text'  %></p>
+<!--[eoform:note]-->
+

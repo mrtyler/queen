@@ -1,0 +1,132 @@
+2008-07-15
+# get all the people who have ever been signed up at a school
+select email from people where id in (select person_id from people_sessions where session_id in (select id from sessions where school_id = (select id from schools where name = 'Hayden')));
+
+2008-05-08
+lamping changes:
+moved mina poniewaz from track 1 to track 5
+moved albert xu and steven zhu from track 5 to track 1
+this might cause some orphaned entries in the roll db (event_people i
+think).
+
+2008-02-11
+looks like i dist-upgraded and got new rails code.
+had to run this to get paginate to work:
+./script/plugin install svn://errtheblog.com/svn/plugins/classic_pagination
+had to edit config/environment.rb and add this:
+config.action_controller.session = { :session_key => "_myapp_session", :secret => "ok you wanted a secret phrase well you got it buddybear.!" }
+
+
+################# old stats and filtering code
+  ### OLD AND DEPRECATED
+  def stats_old
+    @people = Person.find(:all)
+    @games = Hash.new
+    @people.each do |person|
+      games_ary = Game.find(:all, :conditions => [ "(white_id = ? OR black_id = ?)", person.id, person.id ])
+      if games_ary.nil?
+        person.delete
+      else
+        @games[person.id] = games_ary
+      end
+    end
+
+    @people.sort! {|x,y| "#{x.lname}, #{x.fname}" <=> "#{y.lname}, #{y.fname}"}
+    #@person_pages, @people = paginate :people, :per_page => 25
+  end 
+
+  #### old and DEPRECATED
+  def list_orig_filtering_code
+    if params[:sort]
+      @sort = params[:sort]
+    else
+      @sort = "id DESC"
+    end
+
+    # build a (to-be-sanitized) sql statement to do the filtering. this will
+    # get passed to a :conditions clause.
+    @filter_sql = ""
+    @filter_values = Hash.new
+
+    if params[:filter_school_id] && ! params[:filter_school_id].empty?
+      @filter_sql.concat(" AND ") unless @filter_sql.empty?
+      @filter_sql.concat("school_id = :school_id")
+      @filter_values[:school_id] = params[:filter_school_id]
+      @filter_school_id = params[:filter_school_id].to_i # cast to Integer for later comparisons
+    end
+
+    if params[:filter_name] && ! params[:filter_name].empty?
+      @filter_sql.concat(" AND ") unless @filter_sql.empty?
+      @filter_sql.concat("(fname LIKE :name OR lname LIKE :name)")
+      @filter_values[:name] = "%#{params[:filter_name]}%" # %% to do substring searches
+      @filter_name = params[:filter_name]
+    end
+
+    if params[:filter_email] && ! params[:filter_email].empty?
+      @filter_sql.concat(" AND ") unless @filter_sql.empty?
+      @filter_sql.concat("email LIKE :email")
+      @filter_values[:email] = "%#{params[:filter_email]}%" # %% to do substring searches
+      @filter_email = params[:filter_email]
+    end
+
+    print "!!!! filter_sql: #{@filter_sql} filter_values: #{@filter_values}\n"
+    # TODO: :conditions freaks out with an empty sql statement, so test a
+    # tautology if there is no other filtering to do.
+    @filter_sql = "true = true" if @filter_sql.empty?
+    @filter_values = nil if @filter_values.empty?
+
+    #@person_pages, @people = paginate :people, :per_page => 25, :order => @sort, :conditions => @filter
+    @person_pages, @people = paginate :people, :per_page => 25, :order => @sort, :conditions => [ @filter_sql, @filter_values ]
+  end
+
+
+# aborted attempt to do flyer_session_id in views/people/list.rhtml
+<% form_tag ({ :action => params[:action] }, { :method => 'get' }) do %>
+  <label for="flyer_session_id">Flyer Session</label>
+  <select id="flyer_session_id" name="flyer_session_id">
+    <option value=""></option>
+    <% Session.description_id_array.each do |ov| %>
+      <option value= <%= "\"#{ov.last}\"" %> <%= "selected=\"selected\"" if @flyer_session_id.to_i == ov.last.to_i %>>
+        <%= ov.first %>
+      </option>
+    <% end %>
+  </select>
+
+  <%= submit_tag "Flyer" %>
+<% end %>
+
+# pulled non-specific permission slip html fragment
+<P>
+<b><I>Student Name</I> ___________________________________________  <I>Grade</I> _________ <BR>
+<I>Teacher</I> ________________________________________________ </B><b><i>Track</i>__________ <BR>
+<B><I>Home Phone:</I> __________________________ <I>Emergency Contact</I> ________________________________________</B><BR>
+<B><I>Email Address</I> ___________________________________________ <FONT SIZE=2><I>Used to give important tournament and class notifications.</I></FONT></B>
+<B><I>Parent Name</I> ____________________________________________  <I>Parent Signature</I> _________________________</B><BR>
+
+
+for addon, have an intermediary page where you can pick the
+student/session/cost/whatever else. then it generates it. pass this on
+GET for easy management and stuff.
+
+
+
+@people = Person.find(:all, :order => "id DESC", :conditions => "school_id = 4")
+@people.each do |p| Game.find(:all, :conditions => [ "(white_id = ? OR black_id = ?)", 134, 134 ]) end
+
+# pull emails for a school in a commaed list
+print Person.find(:all, :conditions => { :school_id => School.find(:all, :conditions => { :name => "Elise Wolff" }) }).map { |p| p.email }.join(", ")
+
+# foolishly generate blackoutdates sql by hand yuck yuck
+d = Date.new(2007, 8, 27) ; while d < Date.new(2007, 12, 22) ; print "insert into blackoutdates values (NULL, '#{d.to_s}', 5);\n" if (d.wday != 0 && d.wday != 6) ; d = d.succ ; end
+
+d = Date.new(2008, 1, 7) ; while d < Date.new(2008, 1, 26) ; print "insert into blackoutdates values (NULL, '#{d.to_s}', 1);\n" if (d.wday != 0 && d.wday != 6) ; d = d.succ ; end
+d = Date.new(2008, 1, 26) ; while d < Date.new(2008, 2, 24) ; print "insert into blackoutdates values (NULL, '#{d.to_s}', 2);\n" if (d.wday != 0 && d.wday != 6) ; d = d.succ ; end
+d = Date.new(2008, 2, 24) ; while d < Date.new(2008, 3, 15) ; print "insert into blackoutdates values (NULL, '#{d.to_s}', 3);\n" if (d.wday != 0 && d.wday != 6) ; d = d.succ ; end
+d = Date.new(2008, 3, 23) ; while d < Date.new(2008, 4, 6) ; print "insert into blackoutdates values (NULL, '#{d.to_s}', 4);\n" if (d.wday != 0 && d.wday != 6) ; d = d.succ ; end
+d = Date.new(2008, 3, 30) ; while d < Date.new(2008, 4, 13) ; print "insert into blackoutdates values (NULL, '#{d.to_s}', 5);\n" if (d.wday != 0 && d.wday != 6) ; d = d.succ ; end
+
+d = Date.new(2008, 4, 13) ; while d < Date.new(2008, 5, 11) ; print "insert into blackoutdates values (NULL, '#{d.to_s}', 1);\n" if (d.wday != 0 && d.wday != 6) ; d = d.succ ; end
+d = Date.new(2008, 5, 11) ; while d < Date.new(2008, 5, 29) ; print "insert into blackoutdates values (NULL, '#{d.to_s}', 2);\n" if (d.wday != 0 && d.wday != 6) ; d = d.succ ; end
+d = Date.new(2008, 5, 29) ; while d < Date.new(2008, 6, 22) ; print "insert into blackoutdates values (NULL, '#{d.to_s}', 3);\n" if (d.wday != 0 && d.wday != 6) ; d = d.succ ; end
+d = Date.new(2008, 6, 22) ; while d < Date.new(2008, 7, 20) ; print "insert into blackoutdates values (NULL, '#{d.to_s}', 4);\n" if (d.wday != 0 && d.wday != 6) ; d = d.succ ; end
+d = Date.new(2008, 7, 18) ; while d < Date.new(2008, 8, 11) ; print "insert into blackoutdates values (NULL, '#{d.to_s}', 5);\n" if (d.wday != 0 && d.wday != 6) ; d = d.succ ; end

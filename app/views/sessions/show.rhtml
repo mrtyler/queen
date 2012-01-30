@@ -1,0 +1,28 @@
+<!-- vim:tw=0:et:ts=2
+-->
+
+<% for column in Session.content_columns %>
+<p>
+  <b><%= column.human_name %>:</b> <%= h @session.send(column.name) %>
+</p>
+<% end %>
+<p>
+  <b>School:</b> <%= h School.find(@session.school_id).name if @session.school_id %>
+</p>
+<p>
+  <b>Dates:</b>
+  <% for event in @session.get_all_events %>
+    <% bd_ary = Blackoutdate.find(:all, :conditions => ["date = ?", event.date]) %>
+    <%= "<strike>" if ! bd_ary.empty? %>
+    <%= "id=#{event.id}, date=#{event.date}" %>
+    <%= "</strike> tracks:" if ! bd_ary.empty? %>
+    <% for bd in bd_ary %>
+      <%= bd.track.to_s + " " %>
+    <% end %>
+    <br/>
+  <% end %>
+</p>
+
+<%= link_to 'Edit', :action => 'edit', :id => @session %> |
+<%= link_to 'Flyer', :action => 'flyer_template', :id => @session %> |
+<%= link_to 'Back', :action => 'list' %>

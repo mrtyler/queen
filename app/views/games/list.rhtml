@@ -1,0 +1,61 @@
+<!-- vim:tw=0:et:ts=2
+-->
+
+<% @result_type_ary = ResultType.name_id_array %>
+
+<h1>Listing games</h1>
+
+<%= render :partial => 'shared/filter' %>
+
+<%= link_to 'New game', :action => 'new' %>
+
+<table>
+  <tr>
+  	<th>Event</th>
+  	<th>School</th>
+  	<th>White</th>
+  	<th>Black</th>
+  	<th>Winner</th>
+  	<th>Result</th>
+  	<th>White Old Rating</th>
+  	<th>White New Rating</th>
+  	<th>Black Old Rating</th>
+  	<th>Black New Rating</th>
+  	<th>Pgn</th>
+  </tr>
+  
+<% for game in @games %>
+  <% @e = @ses = @sch = @p = nil %>
+  <tr>
+	<!-- god this code sucks. -->
+    <% @e = Event.find(game.event_id) %>
+    <td><%= @e.description unless @e.nil? %></td>
+    <% @ses = Session.find(@e.session_id) unless @e.nil? %>
+    <% @sch = School.find(@ses.school_id) unless @se.nil? %>
+    <td><%= @sch.name unless @sch.nil? %></td>
+    <% @p = Person.find(:first, :conditions => { :id => game.white_id }) %>
+    <td><%= link_to "#{@p.lname}, #{@p.fname}", :action => "edit", :controller => "people", :id => @p.id unless @p.nil? %></td>
+    <% @p = Person.find(:first, :conditions => { :id => game.black_id }) %>
+    <td><%= link_to "#{@p.lname}, #{@p.fname}", :action => "edit", :controller => "people", :id => @p.id unless @p.nil? %></td>
+    <% @p = Person.find(:first, :conditions => { :id => game.winner_id }) %>
+    <td><%= link_to "#{@p.lname}, #{@p.fname}", :action => "edit", :controller => "people", :id => @p.id unless @p.nil? %></td>
+    <td><%= @result_type_ary.rassoc(game.result_type_id).first %></td>
+    <td><%= game.white_old_rating %></td>
+    <td><%= game.white_new_rating %></td>
+    <td><%= game.black_old_rating %></td>
+    <td><%= game.black_new_rating %></td>
+    <td><pre><%= game.pgn %></pre></td>
+
+    <td><%= link_to 'Show', :action => 'show', :id => game %></td>
+    <td><%= link_to 'Edit', :action => 'edit', :id => game %></td>
+    <td><%= link_to 'Destroy', { :action => 'destroy', :id => game }, :confirm => 'Are you sure?', :method => :post %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= link_to 'Previous page', { :page => @game_pages.current.previous } if @game_pages.current.previous %>
+<%= link_to 'Next page', { :page => @game_pages.current.next } if @game_pages.current.next %> 
+
+<br />
+
+<%= link_to 'New game', :action => 'new' %>

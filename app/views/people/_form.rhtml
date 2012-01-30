@@ -1,0 +1,42 @@
+<%= error_messages_for 'person' %>
+
+<!--[form:person]-->
+<p><label for="person_fname">Fname</label><br/>
+<%= text_field 'person', 'fname' %></p>
+
+<p><label for="person_lname">Lname</label><br/>
+<%= text_field 'person', 'lname' %></p>
+
+<p><label for="person_grade">Grade</label><br/>
+<%= text_field 'person', 'grade' %></p>
+
+<p><label for="person_teacher">Teacher</label><br/>
+<%= text_field 'person', 'teacher' %></p>
+
+<p><label for="person_track">Track</label><br/>
+<%= text_field 'person', 'track' %></p>
+
+<p><label for="person_school_id">School</label><br/>
+<%= select 'person', 'school_id', School.name_id_array, { :include_blank => true } %></p>
+
+<p><label for="person_phone1">Phone1</label><br/>
+<%= text_field 'person', 'phone1' %></p>
+
+<p><label for="person_phone2">Phone2</label><br/>
+<%= text_field 'person', 'phone2' %></p>
+
+<p><label for="person_email">Email</label><br/>
+<%= text_field 'person', 'email' %></p>
+
+<p><label for="person_section">Section</label><br/>
+<%= text_field 'person', 'section' %></p>
+
+<p><label for="person_address">Address</label><br/>
+<%= text_field 'person', 'address' %></p>
+
+<p><label for="person_instructor">Instructor?</label><br/>
+<%= select 'person', 'instructor', { 'yes', true, 'no', false }, { :include_blank => false } %></p>
+
+<p><label for="person_rate">Rate</label><br/>
+<%= text_field 'person', 'rate' %></p>
+<!--[eoform:person]-->

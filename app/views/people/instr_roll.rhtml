@@ -1,0 +1,56 @@
+<!-- vim:tw=0:et:ts=2
+-->
+
+<h1>Instructor roll for <%=h @instructor.fname + " " + @instructor.lname %></h1>
+
+<h2>Date filter</h2>
+<% form_tag ({ :action => 'instr_roll' }, { :method => 'get' }) do %>
+  <label for="start_date" name="start_date">Start date</label>
+  <input name="start_date" type="text" length="10" <%= "value=\"#{@start_date}\"" %>>
+  <label for="end_date" name="end_date">End date</label>
+  <input name="end_date" type="text" length="10" <%= "value=\"#{@end_date}\"" %>>
+
+  <%= submit_tag 'Change' %>
+<% end %>
+
+<% form_tag ({:action => 'instr_roll'}, {:start_date => params[:start_date], :end_date =>params[:end_date]}) do %>
+	<table cellspacing="0" border="1" cellpadding="2">
+	  <tr>
+      <th></th>
+	    <th>Date</th>
+	    <th>Session</th>
+	    <th>Attended</th>
+	    <th>Rate</th>
+	    <th>Invoice</th>
+	  </tr>
+	
+    <% line_count = 1 %>
+	  <% for event in @events %>
+	    <tr <%= line_count % 2 == 0 ? "bgcolor=\"#eeeeee\"" : "" %>>
+	      <td><%=h line_count %></td>
+		    <td><%=h event.date %></td>
+		    <td><%=h Session.find(event.session_id).description %></td>
+		    <td>
+          <% ep = EventsPerson.find(:first, :conditions => ["person_id = ? AND event_id = ?", @instructor.id, event.id]) %>
+          <% attended = ! ep.nil? %>
+		      was: <%= attended ? "x" : "_" %>
+          <input name="checkbox[<%=h event.id %>]" type="checkbox" value="yes" <%= "checked=\"checked\"" if attended %>/>
+          <input name="checkbox[<%=h event.id %>]" type="hidden" value="no"/>
+		    </td>
+		    <td>
+          <input name="rate[<%=h event.id %>]" type="text" size="8" value="<%=h @instructor.rate %>" />
+        </td>
+        <td>
+          <% invoice = Invoice.find(:first, :conditions => ["payee_id = ? AND event_id = ?", @instructor.id, event.id]) %>
+          <% if ! invoice.nil? %>
+            <%= link_to "#{invoice.id}", :controller => 'invoices', :action => 'edit', :id => invoice %>
+          <% end %>
+        </td>
+		  </tr>
+	    <% line_count = line_count.succ %>
+	  <% end %>
+	</table>
+
+  <%= submit_tag 'Submit' %>
+ 
+<% end %>

@@ -1,0 +1,12 @@
+<h1>Editing sessions_super_session</h1>
+
+<%= error_messages_for :sessions_super_session %>
+
+<% form_for(@sessions_super_session) do |f| %>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @sessions_super_session %> |
+<%= link_to 'Back', sessions_super_sessions_path %>

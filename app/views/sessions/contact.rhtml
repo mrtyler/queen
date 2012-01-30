@@ -1,0 +1,40 @@
+<!-- vim:tw=0:et:ts=2
+-->
+
+<h1>Contact sheet for <%= School.find(@session.school_id).name %></h1>
+
+<% @print_version = params[:print_version] %>
+<%= render :partial => 'actions' %>
+
+<table cellspacing="0" cellpadding="2" <%= 'border="1"' if @print_version%>>
+  <tr>
+    <th></th>
+    <th>Name</th>
+    <th>Grade</th>
+    <th>Track</th>
+    <th>Teacher</th>
+    <th>Phone1</th>
+    <th>Phone2</th>
+  </tr>
+
+  <% # figure out who all the people are so we can sort them meaningfully. %>
+  <% @person_session_ary = PeopleSession.find(:all, :conditions => { :session_id => @session.id }) %>
+  <% @person_ary = Array.new %>
+  <% for @p in @person_session_ary %>
+    <% @person_ary.push(Person.find(@p.person_id)) %>
+  <% end %>
+  <% @person_ary.sort! { |x,y| x.lname <=> y.lname } %>
+  <% @line_count = 1 %>
+  <% for @person in @person_ary %>
+    <tr <%= @line_count % 2 == 0 ? "bgcolor=\"#eeeeee\"" : "" %>>
+      <td><%= @line_count %></td>
+      <td><%= "#{@person.lname}, #{@person.fname}"%></td>
+      <td><%= @person.grade %></td>
+      <td><%= @person.track %></td>
+      <td><%= @person.teacher %></td>
+      <td><%= @person.phone1 %></td>
+      <td><%= @person.phone2 %></td>
+    </tr>
+    <% @line_count = @line_count.succ %>
+  <% end %>
+</table>

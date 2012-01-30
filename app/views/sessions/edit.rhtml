@@ -1,0 +1,29 @@
+<!-- vim:tw=0:et:ts=2
+-->
+<h1>Editing session</h1>
+
+<% form_tag :action => 'update', :id => @session do %>
+  <%= render :partial => 'form' %>
+
+  <label for="date_text">Add More Dates</label> <font size="-2">(comma separated, yyyy-mm-dd or mm/dd/yyyy.)<br/>
+  <b>Note:</b> If you leave off the year, I will assume that dates in the
+  future are from the current year, and that dates that appear to be in the
+  past are actually in the year after the current year.</font><br/>
+  <input type="text" id="date_text" name="date_text" size="40"/>
+
+  <%= submit_tag 'Edit' %>
+<% end %>
+
+  <label for="dates">Existing Dates</label><br/>
+  <% for event in @session.get_all_events %>
+    <%= event.date %>
+    <%= link_to "Edit", :controller => "events", :action => "edit", :id => event.id %>
+    <!-- <%= link_to 'Destroy', :controller => "events", :action => 'destroy', :id => event.id , :confirm => 'Are you sure?', :method => :delete %> -->
+    <%= button_to "Destroy", :controller => "events", :action => "destroy", :id => event.id, :confirm => "Are you sure?", :method => :delete %>
+    <br/>
+  <% end %>
+
+<%= @session.display_all_people %>
+ 
+<%= link_to 'Show', :action => 'show', :id => @session %> |
+<%= link_to 'Back', :action => 'list' %>

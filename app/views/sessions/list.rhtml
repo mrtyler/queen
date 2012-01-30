@@ -1,0 +1,58 @@
+<!-- vim:tw=0:et:ts=2
+-->
+
+<h1>Listing sessions</h1>
+
+<table>
+  <tr>
+  <th><%= link_to 'id', :action => 'list', :sort => "id" %></th>
+  <th><%= link_to 'cost', :action => 'list', :sort => "cost" %></th>
+  <th><%= link_to 'school', :action => 'list', :sort => "school_id" %></th>
+  <th>tracks?</th>
+  <th>weeks</th>
+  <th>weeks derived</th>
+  <th>who</th>
+  <th>dates</th>
+  </tr>
+  
+<% for session in @sessions %>
+  <tr>
+    <td><%= session.id %></td>
+    <td>$<%= sprintf("%0.2f", session.cost) %></td>
+    <td><%=h School.find(session.school_id).name if session.school_id %></td>
+    <td><%=h session.has_tracks %></td>
+    <td><%=h session.number_of_weeks %></td>
+    <td><%=h session.number_of_weeks_derived %></td>
+    <td><%=h session.who %></td>
+      <td>
+		<%=h session.from_to_dates %>
+		<!--
+        <% for event in session.get_all_events %>
+        <% bd_ary = Blackoutdate.find(:all, :conditions => ["date = ?", event.date]) %>
+        <%= "<strike>" if ! bd_ary.empty? && session.has_tracks %>
+        <%= "id=#{event.id}, date=#{event.date}" %>
+        <%= "</strike> tracks:" if ! bd_ary.empty? && session.has_tracks %>
+            <% for bd in bd_ary %>
+              <%= bd.track.to_s + " " if session.has_tracks %>
+            <% end %>
+            <br/>
+        <% end %>
+		-->
+      </td>
+    <td><%= link_to 'Show', :action => 'show', :id => session %></td>
+    <td><%= link_to 'Edit', :action => 'edit', :id => session %></td>
+    <td><%= link_to 'Flyer', :action => 'flyer_template', :id => session %></td>
+    <td><%= link_to 'Manage People', :action => 'manage_people', :id => session %></td>
+    <td><%= link_to 'Roll', :action => 'roll', :id => session %></td>
+    <td><%= link_to 'Contact', :action => 'contact', :id => session %></td>
+    <td><%= link_to 'Destroy', { :action => 'destroy', :id => session }, :confirm => 'Are you sure?', :method => :post %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= link_to 'Previous page', { :page => @session_pages.current.previous } if @session_pages.current.previous %>
+<%= link_to 'Next page', { :page => @session_pages.current.next } if @session_pages.current.next %> 
+
+<br />
+
+<%= link_to 'New session', :action => 'new' %>

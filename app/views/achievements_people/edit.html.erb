@@ -1,0 +1,12 @@
+<h1>Editing achievements_person</h1>
+
+<%= error_messages_for :achievements_person %>
+
+<% form_for(@achievements_person) do |f| %>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @achievements_person %> |
+<%= link_to 'Back', achievements_people_path %>

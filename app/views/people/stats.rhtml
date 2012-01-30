@@ -1,0 +1,36 @@
+<!-- vim:tw=0:et:ts=2
+-->
+
+<h1>Stats</h1>
+
+<%= render :partial => 'shared/filter' %>
+
+<table cellspacing="0" border="1" cellpadding="2">
+  <tr>
+    <th>Name</th>
+	<th>Rating</th>
+    <th>W</th>
+    <th>L</th>
+    <th>D</th>
+    <th>Won</th>
+    <th>Lost</th>
+    <th>Drew</th>
+  </tr>
+
+<% for person in @people %>
+  <% next unless @stats[person.id]['has_games'] %>
+  <tr>
+    <td><%= "#{person.fname} #{person.lname}" %></td>
+    <td><%= person.rating %></td>
+    <td><%= @stats[person.id]['wins'] if @stats[person.id] %></td>
+    <td><%= @stats[person.id]['losses'] if @stats[person.id] %></td>
+    <td><%= @stats[person.id]['draws'] if @stats[person.id] %></td>
+    <td><%= @stats[person.id]['won_against'] if @stats[person.id] %></td>
+    <td><%= @stats[person.id]['lost_against'] if @stats[person.id] %></td>
+    <td><%= @stats[person.id]['drew_against'] if @stats[person.id] %></td>
+  </tr>
+<% end %>
+
+</table>
+
+<br />

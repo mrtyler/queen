@@ -1,0 +1,46 @@
+<!-- vim:tw=0:et:ts=2
+-->
+
+<h1>Manage people for session <%= @session.id %></h1>
+
+<% @print_version = params[:print_version] %>
+<%= render :partial => 'actions' %>
+
+<% form_tag :action => 'manage_people' do %>
+  <table cellspacing="0" cellpadding="2" <%= 'border="1"' if @print_version%>>
+    <tr>
+      <th>Name</th>
+      <th>Grade</th>
+      <th>Track</th>
+      <th>Add/Remove</th>
+      <th>Pay Type</th>
+      <th>Pay Amt</th>
+      <th>Pay Desc</th>
+    </tr>
+  
+    <% # person_ary = Person.find(:all, :order => "lname, fname") %>
+    <% person_ary = Person.find(:all, :conditions => { :school_id => @session.school_id }, :order => "lname, fname") %>
+
+    <% for @person in person_ary %>
+      <tr>
+        <td><%= link_to @person.lfname, :action => "edit", :controller => "people", :id => @person.id unless @person.nil? %></td>
+        <td><%= @person.grade %></td>
+        <td><%= @person.track %></td>
+        <td>
+          <% @is_attached = PeopleSession.find(:first, :conditions => { :person_id => @person.id, :session_id => @session.id }) %>
+          cur: <%= @is_attached.nil? ? "_" : "x" %>
+          change to: 
+            <input name="checkbox[<%= @person.id %>]" type="checkbox" value="yes" <%= "checked=\"checked\"" if ! @is_attached.nil? %>>
+            <input name="checkbox[<%= @person.id %>]" type="hidden" value="no">
+        </td>
+        <td>
+          <%= PaymentType.dropdown("payment_type_id[#{@person.id}]") %>
+        </td>
+        <td><input name="cost[<%= @person.id %>]" type="text" value="<%= @session.cost %>" size="8"/></td>
+        <td><input name="payment_desc[<%= @person.id %>]" type="text" size="20"/></td>
+      </tr>
+    <% end %>
+  </table>
+
+  <%= submit_tag 'Add/Remove' %>
+<% end %>
