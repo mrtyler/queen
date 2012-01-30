@@ -1,0 +1,22 @@
+2012-01-29 mrtyler
+
+queen is a Ruby on Rails application I built in 2007-2008 to help me
+manage after-school chess programs. Features include attendance
+tracking, generation of flyers for advertising new classes, and rating
+calculations for students.
+
+This was my first RoR app so it is far from beautiful, and I was less
+enlightened in those days so it does not have test coverage or data
+migrations.
+
+I also can't get it to run -- the machine where it used to live is now
+in cold storage. There are numerous instances of people encountering the
+error below, but no solutions:
+
+    /Library/Ruby/Gems/1.8/gems/rails-1.2.3/lib/initializer.rb:328:in
+    `send': undefined method `session=' for ActionController::Base:Class
+    (NoMethodError)
+
+I tried a few things but nothing helped. If you have a burning desire to
+see this code up and running, let me know and I'll spend some time
+sorting it out.
